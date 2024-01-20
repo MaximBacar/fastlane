@@ -11,8 +11,8 @@ def index():
 def appointment():
     return
 
-@app.route("/freeAppointment")
-def free():
+@app.route("/availableAppoint")
+def available():
     return
 
 app.run(debug=True)
