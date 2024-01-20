@@ -51,6 +51,7 @@ def get_time( reservation_id ) -> (datetime, datetime):
     start = reservation.start_time
     end = start + datetime.timedelta(hours=duration)
 
+    session.close()
     
 
     
