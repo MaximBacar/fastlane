@@ -36,6 +36,8 @@ class User(Base):
     immatriculation = Column(String)
 
 
+
+
 def create_user( f_name, l_name, email, phone, address, immatriculation) -> int:
     session = Session()
     new_user = User(first_name=f_name, last_name=l_name, email=email, phone=phone, address=address, immatriculation=immatriculation)
@@ -45,10 +47,19 @@ def create_user( f_name, l_name, email, phone, address, immatriculation) -> int:
     session.close()
     return id
 
-def create_reservation(userid, start):
+def get_vehicle_id(type : str) -> int:
     session = Session()
-    new_reserv = Reservation(user_id = userid, vehicle_id = 1, start_time = start)
-    session.add(new_reserv)
+    vehicle = session.query(Vehicle).filter(Vehicle.type == type).first()
+    id = vehicle.id
+    session.close()
+    return id
+    
+
+def create_reservation(reservation_data : dict):
+    session = Session()
+    user_id = create_user(reservation_data["f_name"], reservation_data["l_name"], reservation_data["email"], reservation_data["phone"], reservation_data["address"], reservation_data["immatriculation"])
+    new_reservation = Reservation(user_id = user_id, vehicle_id = get_vehicle_id(reservation_data['type']), start_time = reservation_data['start_time'])
+    session.add(new_reservation)
     session.commit()
     session.close()
 
@@ -78,3 +89,15 @@ def is_overlaped(start : datetime, end : datetime, reservation_id):
 
 Base.metadata.create_all(engine)
 
+user_registration = {
+    "f_name"            : "fname",
+    "l_name"            : "lname",
+    "email"             : "email",
+    "phone"             : "phone",
+    "address"           : "address",
+    "immatriculation"   : "immatriculation",
+    "type"              : "compact",
+    "start_time"        : datetime.datetime.now()
+}
+
+create_reservation(user_registration)

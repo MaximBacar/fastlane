@@ -1,15 +1,15 @@
-import datetime
+# import datetime
 
-a = datetime.datetime(year=2002, month=4, day=4)
-t = datetime.timedelta(days=5)
-b = datetime.datetime(bour = 2, min = 37)
-c = datetime.datetime.now().time
+# a = datetime.datetime(year=2002, month=4, day=4)
+# t = datetime.timedelta(days=5)
+# b = datetime.datetime(bour = 2, min = 37)
+# c = datetime.datetime.now().time
 
-print(a)
-print(a+t)
-print(b)
-print(c)
-print(type(t))
+# print(a)
+# print(a+t)
+# print(b)
+# print(c)
+# print(type(t))
 # ///////
 
 # info = {
@@ -64,3 +64,21 @@ print(type(t))
 # create_reservation(id, datetime.datetime.today())
 
 # def create_test_reservation( user_info : dict, time : datetime.datetime ):
+
+
+
+# def create_user( f_name, l_name, email, phone, address, immatriculation) -> int:
+#     session = Session()
+#     new_user = User(first_name=f_name, last_name=l_name, email=email, phone=phone, address=address, immatriculation=immatriculation)
+#     session.add(new_user)
+#     session.commit()
+#     id = new_user.id
+#     session.close()
+#     return id
+
+# def create_reservation(userid, start):
+#     session = Session()
+#     new_reserv = Reservation(user_id = userid, vehicle_id = 1, start_time = start)
+#     session.add(new_reserv)
+#     session.commit()
+#     session.close()
