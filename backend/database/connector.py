@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime, func, Boolean
 
 import datetime
@@ -38,7 +37,20 @@ class User(Base):
     immatriculation = Column(String)
 
 
-def get_time( reservation_id ) -> (datetime, datetime):
+def create_user( f_name, l_name, email, phone, address, immatriculation) -> int:
+    session = Session()
+    new_user = User(first_name=f_name, last_name=l_name, email=email, phone=phone, address=address, immatriculation=immatriculation)
+    id = new_user.id
+    session.add(new_user)
+    session.commit()
+    session.close()
+    return id
+
+def create_test_reservation( user_info : dict, time : datetime.datetime, ):
+    pass
+
+
+def get_time( reservation_id ) -> (datetime.datetime, datetime.datetime):
     '''
     Get the beginning and end time of a reservation
     '''
@@ -48,15 +60,32 @@ def get_time( reservation_id ) -> (datetime, datetime):
     vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id)
     duration = vehicle.duration
 
-    start = reservation.start_time
+    start : datetime.datetime = reservation.start_time
     end = start + datetime.timedelta(hours=duration)
 
-    
+    session.close()
 
-    
-
+    return start, end
 
 def is_overlaped(start : datetime, end : datetime, reservation_id):
     pass
 
 Base.metadata.create_all(engine)
+
+
+
+
+# info = {
+#     "f_name"            : "Maxim",
+#     "l_name"            : "Bacar",
+#     "email"             : "maximbacar@hotmail.ca",
+#     "phone"             : "15143764547",
+#     "address"           : "1234 Rue de la paix",
+#     "immatriculation"   : "123456789"
+# }
+
+# v = {
+
+# }
+
+#create_user("Maxim", "Bacar", "maximbacar@hotmail.ca", "15143764547", "1234 Rue de la paix", "123456789")
