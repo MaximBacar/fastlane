@@ -47,17 +47,22 @@ def create_user( f_name, l_name, email, phone, address, immatriculation) -> int:
     return id
 
 def create_test_reservation( user_info : dict, time : datetime.datetime, ):
-    pass
+    session = Session()
+
+    f = Reservation(user_id=3, vehicle_id=4, start_time = datetime.datetime(year=2023, month=3, day=4), day= datetime.datetime(year=2023, month=3, day=4))
+    session.add(f)
+    session.commit()
+    session.close()
 
 
-def get_time( reservation_id ) -> (datetime.datetime, datetime.datetime):
+def get_reservation_time( reservation_id ) -> (datetime.datetime, datetime.datetime):
     '''
     Get the beginning and end time of a reservation
     '''
     session = Session()
     reservation = session.query(Reservation).filter(Reservation.id == reservation_id).first()
     vehicle_id = reservation.vehicle_id
-    vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id)
+    vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
     duration = vehicle.duration
 
     start : datetime.datetime = reservation.start_time
@@ -67,25 +72,53 @@ def get_time( reservation_id ) -> (datetime.datetime, datetime.datetime):
 
     return start, end
 
-def is_overlaped(start : datetime, end : datetime, reservation_id):
-    pass
+def is_overlaped(slot : (datetime.datetime, datetime.datetime), reservation_id):
+    '''
+    Return if the time slot overlaps a reservation
+    '''
+    slot_start, slot_end                            = slot
+    reservation_time_start, reservation_time_end    = get_reservation_time( reservation_id )
+
+    return slot_end >= reservation_time_start and slot_start <= reservation_time_end
+
+def get_slots(time_slot : (datetime.datetime, datetime.datetime)):
+    slots = {
+        'compact'   : 0,
+        'medium'    : 0,
+        'full'      : 0,
+        'class-1'   : 0,
+        'class-2'   : 0,
+        'else'      : 0
+    }
+
+    session = Session()
+    slot_day = time_slot[0].date()
+    reservations = session.query(Reservation).filter(func.DATE(Reservation.start_time) == slot_day).all()
+    if len(reservations) > 0:
+        for reservation in reservations:
+            overlap = is_overlaped(time_slot,reservation.id)
+            if overlap:
+                vehicle_id = reservation.vehicle_id
+                vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
+                if slots[vehicle.type] > 0:
+                    if slots['else'] < 5:
+                        slots['else'] += 1
+                else:
+                    slots[vehicle.type] += 1
+    return slots
+
+def is_slot_valid(time_slot : (datetime.datetime, datetime.datetime), type : str):
+    slots = get_slots(time_slot)
+    if slots[type] > 0:
+        if slots['else'] >= 5:
+            return False
+        
+    return True
 
 Base.metadata.create_all(engine)
 
+a = get_slots((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)))
+print(a)
 
+print(is_slot_valid((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)), type="class-1"))
 
-
-# info = {
-#     "f_name"            : "Maxim",
-#     "l_name"            : "Bacar",
-#     "email"             : "maximbacar@hotmail.ca",
-#     "phone"             : "15143764547",
-#     "address"           : "1234 Rue de la paix",
-#     "immatriculation"   : "123456789"
-# }
-
-# v = {
-
-# }
-
-#create_user("Maxim", "Bacar", "maximbacar@hotmail.ca", "15143764547", "1234 Rue de la paix", "123456789")
