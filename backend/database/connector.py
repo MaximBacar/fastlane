@@ -64,28 +64,65 @@ def create_reservation(reservation_data : dict):
     session.close()
 
 
-def get_time( reservation_id ) -> (datetime.datetime, datetime.datetime):
+def get_reservation_time( reservation_id ) -> (datetime.datetime, datetime.datetime):
     '''
     Get the beginning and end time of a reservation
     '''
     session = Session()
     reservation = session.query(Reservation).filter(Reservation.id == reservation_id).first()
     vehicle_id = reservation.vehicle_id
-    vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id)
+    vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
     duration = vehicle.duration
 
     start : datetime.datetime = reservation.start_time
     end = start + datetime.timedelta(hours=duration)
-     
-    session.close
-    return (start, end)
 
+    session.close()
 
-    
+    return start, end
 
+def is_overlaped(slot : (datetime.datetime, datetime.datetime), reservation_id):
+    '''
+    Return if the time slot overlaps a reservation
+    '''
+    slot_start, slot_end                            = slot
+    reservation_time_start, reservation_time_end    = get_reservation_time( reservation_id )
 
-def is_overlaped(start : datetime, end : datetime, reservation_id):
-    pass
+    return slot_end >= reservation_time_start and slot_start <= reservation_time_end
+
+def get_slots(time_slot : (datetime.datetime, datetime.datetime)):
+    slots = {
+        'compact'   : 0,
+        'medium'    : 0,
+        'full'      : 0,
+        'class-1'   : 0,
+        'class-2'   : 0,
+        'else'      : 0
+    }
+
+    session = Session()
+    slot_day = time_slot[0].date()
+    reservations = session.query(Reservation).filter(func.DATE(Reservation.start_time) == slot_day).all()
+    if len(reservations) > 0:
+        for reservation in reservations:
+            overlap = is_overlaped(time_slot,reservation.id)
+            if overlap:
+                vehicle_id = reservation.vehicle_id
+                vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
+                if slots[vehicle.type] > 0:
+                    if slots['else'] < 5:
+                        slots['else'] += 1
+                else:
+                    slots[vehicle.type] += 1
+    return slots
+
+def is_slot_valid(time_slot : (datetime.datetime, datetime.datetime), type : str):
+    slots = get_slots(time_slot)
+    if slots[type] > 0:
+        if slots['else'] >= 5:
+            return False
+        
+    return True
 
 Base.metadata.create_all(engine)
 
@@ -101,3 +138,8 @@ user_registration = {
 }
 
 create_reservation(user_registration)
+a = get_slots((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)))
+print(a)
+
+print(is_slot_valid((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)), type="class-1"))
+
