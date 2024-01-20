@@ -24,7 +24,6 @@ class Reservation(Base):
     user_id         = Column(Integer)
     vehicle_id      = Column(Integer)
     start_time      = Column(DateTime)
-    day             = Column(DateTime)
 
 class User(Base):
     __tablename__   = 'users'
@@ -37,20 +36,30 @@ class User(Base):
     immatriculation = Column(String)
 
 
+
+
 def create_user( f_name, l_name, email, phone, address, immatriculation) -> int:
     session = Session()
     new_user = User(first_name=f_name, last_name=l_name, email=email, phone=phone, address=address, immatriculation=immatriculation)
-    id = new_user.id
     session.add(new_user)
     session.commit()
+    id = new_user.id
     session.close()
     return id
 
-def create_test_reservation( user_info : dict, time : datetime.datetime, ):
+def get_vehicle_id(type : str) -> int:
     session = Session()
+    vehicle = session.query(Vehicle).filter(Vehicle.type == type).first()
+    id = vehicle.id
+    session.close()
+    return id
+    
 
-    f = Reservation(user_id=3, vehicle_id=4, start_time = datetime.datetime(year=2023, month=3, day=4), day= datetime.datetime(year=2023, month=3, day=4))
-    session.add(f)
+def create_reservation(reservation_data : dict):
+    session = Session()
+    user_id = create_user(reservation_data["f_name"], reservation_data["l_name"], reservation_data["email"], reservation_data["phone"], reservation_data["address"], reservation_data["immatriculation"])
+    new_reservation = Reservation(user_id = user_id, vehicle_id = get_vehicle_id(reservation_data['type']), start_time = reservation_data['start_time'])
+    session.add(new_reservation)
     session.commit()
     session.close()
 
@@ -117,6 +126,18 @@ def is_slot_valid(time_slot : (datetime.datetime, datetime.datetime), type : str
 
 Base.metadata.create_all(engine)
 
+user_registration = {
+    "f_name"            : "fname",
+    "l_name"            : "lname",
+    "email"             : "email",
+    "phone"             : "phone",
+    "address"           : "address",
+    "immatriculation"   : "immatriculation",
+    "type"              : "compact",
+    "start_time"        : datetime.datetime.now()
+}
+
+create_reservation(user_registration)
 a = get_slots((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)))
 print(a)
 
