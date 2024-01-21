@@ -5,6 +5,7 @@ import FullSizeImg from './Images/FullSizeImg.png';
 import Class1TruckImg from './Images/Class1TruckImg.png';
 import Class2TruckImg from './Images/Class2TruckImg.png';
 import {Link} from "react-router-dom";
+import "./HomePage.css";
 
 const HomePage = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
@@ -70,7 +71,17 @@ const HomePage = () => {
 
   return (
     <div style={{ flexDirection: 'column' }}>
-      <div style={titleStyle}>FastLane</div>
+      {/* <div style={titleStyle}>FastLane</div> */}
+
+
+    <div className="label">
+      <img className="fast-lane" alt="Fast lane" src="fast-lane.png" />
+    </div>
+
+ 
+
+
+
 
       <div style={subtitleStyle}>Select your vehicle type</div>
 

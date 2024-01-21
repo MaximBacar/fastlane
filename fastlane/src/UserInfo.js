@@ -76,7 +76,7 @@ const UserInfo = () => {
   };
 
   return (
-    <div className='page-content' style={{ margin: 150, display: 'flex' }}>
+    <div className='page-content' style={{ margin: 'auto', display: 'flex' }}>
       <div style={{ flex: 1, marginRight: 50 }}>
         <h1>User Information</h1>
 
