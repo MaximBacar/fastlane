@@ -99,7 +99,7 @@ def get_slots(time_slot : (datetime.datetime, datetime.datetime)):
         'class-2'   : 0,
         'else'      : 0
     }
-
+    
     session = Session()
     slot_day = time_slot[0].date()
     reservations = session.query(Reservation).filter(func.DATE(Reservation.start_time) == slot_day).all()
@@ -137,9 +137,9 @@ user_registration = {
     "start_time"        : datetime.datetime.now()
 }
 
-create_reservation(user_registration)
-a = get_slots((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)))
-print(a)
+# create_reservation(user_registration)
+# a = get_slots((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)))
+# print(a)
 
-print(is_slot_valid((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)), type="class-1"))
+# print(is_slot_valid((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)), type="class-1"))
 
