@@ -14,11 +14,19 @@ const HomePage = () => {
     backgroundColor: 'white',
     margin: '20px',
     borderRadius: '25px',
-    border: `1px solid ${selectedVehicle ? (selectedVehicle === 'CompactCar' ? '#0583D2' : 'black') : 'black'}`,
+    border: `2px solid ${selectedVehicle ? (selectedVehicle === 'CompactCar' ? '#0583D2' : 'black') : 'black'}`,
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'center',
     cursor: 'pointer',
+    position: 'relative', // Added position relative for positioning the text
+  };
+
+  const textBelowImage = {
+    position: 'absolute',
+    bottom: '25px',
+    fontSize: '14px',
+    fontWeight: 'bold',
   };
 
   const titleStyle = {
@@ -63,26 +71,31 @@ const HomePage = () => {
       <div style={subtitleStyle}>Select your vehicle type</div>
 
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '25px' }}>
-        <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'CompactCar' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('CompactCar')}>
-          <img src={CompactCarImg} alt="Compact Car" style={{ width: '78px', height: '78px', marginBottom: '10px' }} />
+      <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'CompactCar' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('CompactCar')}>          <img src={CompactCarImg} alt="Compact Car" style={{ width: '78px', height: '78px', marginBottom: '10px' }} />
+          <div style={textBelowImage}>Compact</div>
         </div>
 
         <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'MediumCar' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('MediumCar')}>
           <img src={MediumCarImg} alt="Medium Car" style={{ width: '115px', height: '115px', marginBottom: '10px' }} />
+          <div style={textBelowImage}>Medium</div>
+
         </div>
 
-        <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'FullSizeCar' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('FullSizeCar')}>
-          <img src={FullSizeImg} alt="Full-Size Car" style={{ width: '115px', height: '115px', marginBottom: '10px' }} />
+        <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'FullSizeCar' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('FullSizeCar')}>          <img src={FullSizeImg} alt="Full-Size Car" style={{ width: '115px', height: '115px', marginBottom: '10px' }} />
+          <div style={textBelowImage}>Full-Size</div>
+
         </div>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'Class1Truck' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('Class1Truck')}>
-          <img src={Class1TruckImg} alt="Class1 Truck" style={{ width: '115px', height: '115px', marginBottom: '10px' }} />
+      <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'Class1Truck' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('Class1Truck')}>          <img src={Class1TruckImg} alt="Class1 Truck" style={{ width: '115px', height: '115px', marginBottom: '10px' }} />
+          <div style={textBelowImage}>Class 1 Truck</div>
+
         </div>
 
-        <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'Class2Truck' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('Class2Truck')}>
-          <img src={Class2TruckImg} alt="Class2 Truck" style={{ width: '115px', height: '115px', marginBottom: '10px' }} />
+        <div style={{ ...squareStyle, border: `2px solid ${selectedVehicle ? (selectedVehicle === 'Class2Truck' ? '#0583D2' : 'black') : 'black'}` }} onClick={() => handleVehicleClick('Class2Truck')}>          <img src={Class2TruckImg} alt="Class2 Truck" style={{ width: '115px', height: '115px', marginBottom: '10px' }} />
+          <div style={textBelowImage}>Class 2 Truck</div>
+
         </div>
       </div>
 
