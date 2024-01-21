@@ -4,9 +4,12 @@ import MediumCarImg from './Images/MediumCarImg.png';
 import FullSizeImg from './Images/FullSizeImg.png';
 import Class1TruckImg from './Images/Class1TruckImg.png';
 import Class2TruckImg from './Images/Class2TruckImg.png';
+import {Link} from "react-router-dom";
 
 const HomePage = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [showButton, setShowButtion] = useState(false);
+
 
   const squareStyle = {
     width: '182px',
@@ -61,6 +64,7 @@ const HomePage = () => {
 
   const handleVehicleClick = (vehicleType) => {
     setSelectedVehicle(vehicleType);
+    setShowButtion(true);
     // Add any additional logic or actions when a vehicle is clicked
   };
 
@@ -99,9 +103,12 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div style={{ position: 'absolute', bottom: '50px', right: '75px' }}>
+    {showButton && (<Link to="/UserInfo"><button style={buttonStyle}>Book</button></Link>)}
+      
+      {/* <div style={{ position: 'absolute', bottom: '50px', right: '75px' }}>
         <div style={buttonStyle}>Book</div>
-      </div>
+      </div> */}
+    {/* </div> */}
     </div>
   );
 };

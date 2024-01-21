@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './UserInfo.css';
 import UserInfoImg from './Images/UserInfoImg.webp';
+import { Link } from 'react-router-dom';
 
 const UserInfo = () => {
   const [formData, setFormData] = useState({
@@ -140,8 +141,9 @@ const UserInfo = () => {
                 required
               />
             </div>
-
+            <Link to="/Calendar">
             <button type='submit'>Submit</button>
+            </Link>
           </form>
         </div>
       </div>
