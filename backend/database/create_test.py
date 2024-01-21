@@ -23,7 +23,6 @@ class Reservation(Base):
     user_id         = Column(Integer)
     vehicle_id      = Column(Integer)
     start_time      = Column(DateTime)
-    day             = Column(DateTime)
 
 class User(Base):
     __tablename__   = 'users'

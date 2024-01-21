@@ -35,6 +35,11 @@ class User(Base):
     address         = Column(String)
     immatriculation = Column(String)
 
+class Turned_Away(Base):
+    __tablename__ = "turn_aways"
+    id            = Column(Integer, primary_key=True, autoincrement=True)
+
+
 
 
 def create_user(f_name, l_name, email, phone, address, immatriculation) -> int:
@@ -62,7 +67,6 @@ def create_reservation(reservation_data : dict):
     session.commit()
     session.close()
 
-# added
 def get_fullname(user_id) -> str:
     session = Session()
     user = session.query(User).filter(User.id == user_id).first()
@@ -72,8 +76,7 @@ def get_fullname(user_id) -> str:
     
     session.close()
     return fullname
-    
-# added
+
 def get_vehicle_type(vehicle_id) -> str:
     session = Session()
     vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
@@ -90,8 +93,14 @@ def get_phone_nb(user_id) -> str:
     session.close()
     return phonenb
 
+def get_service_price(vehicle_id) -> int:
+    session = Session()
+    vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
+    service_price = vehicle.service_price
+    
+    session.close()
+    return service_price
 
-# added
 def get_reservations(the_date : datetime.datetime):
     session = Session()
     just_date = the_date.date()
@@ -99,6 +108,7 @@ def get_reservations(the_date : datetime.datetime):
     all_reservations = session.query(Reservation).filter(func.DATE(Reservation.start_time) == just_date).all()
     
     list_reservations = []
+    total_amount = 0.00
     
     for reservation in all_reservations:
         start, end = get_reservation_time(reservation.id)
@@ -110,9 +120,11 @@ def get_reservations(the_date : datetime.datetime):
             "end" : f"{end.hour}:{str(end.minute).zfill(2)}"
         }
         list_reservations.append(diction)
+        total_amount = total_amount + get_service_price(reservation.vehicle_id)
         
     
     print(list_reservations)
+    print("%.2f" % total_amount)
     session.close()
 
 
@@ -177,3 +189,5 @@ def is_slot_valid(time_slot : (datetime.datetime, datetime.datetime), type : str
     return True
 
 Base.metadata.create_all(engine)
+
+get_reservations(datetime.datetime(2023,1,1))
