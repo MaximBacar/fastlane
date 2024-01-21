@@ -23,6 +23,7 @@ class Reservation(Base):
     user_id         = Column(Integer)
     vehicle_id      = Column(Integer)
     start_time      = Column(DateTime)
+    validated       = Column(Boolean)
 
 class User(Base):
     __tablename__   = 'users'
@@ -63,13 +64,13 @@ class2 = Vehicle(type="class-2", service_price=700.00, duration=2)
 
 
 
-r1 = Reservation(user_id=user_id1, vehicle_id=4, start_time=datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0))
-r2 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=30, second=0))
-r3 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0))
-r4 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0))
-r5 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0))
-r6 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0))
-r7 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0))
+r1 = Reservation(user_id=user_id1, vehicle_id=4, start_time=datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0), validated = True)
+r2 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=30, second=0), validated = True)
+r3 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0), validated = True)
+r4 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0), validated = True)
+r5 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0), validated = True)
+r6 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0), validated = True)
+r7 = Reservation(user_id=user_id2, vehicle_id=5,  start_time=datetime.datetime(year=2023, month=1, day=1, hour=2, minute=33, second=0), validated = True)
 session.add(compact)
 session.add(medium)
 session.add(full)
@@ -83,5 +84,7 @@ session.add(r4)
 session.add(r5)
 session.add(r6)
 session.add(r7)
+
+
 session.commit()
 session.close()

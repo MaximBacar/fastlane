@@ -24,6 +24,7 @@ class Reservation(Base):
     user_id         = Column(Integer)
     vehicle_id      = Column(Integer)
     start_time      = Column(DateTime)
+    validated       = Column(Boolean)
 
 class User(Base):
     __tablename__   = 'users'
@@ -34,12 +35,6 @@ class User(Base):
     phone           = Column(String)
     address         = Column(String)
     immatriculation = Column(String)
-
-class Turned_Away(Base):
-    __tablename__ = "turn_aways"
-    id            = Column(Integer, primary_key=True, autoincrement=True)
-
-
 
 
 def create_user(f_name, l_name, email, phone, address, immatriculation) -> int:
@@ -55,6 +50,8 @@ def get_vehicle_id(type : str) -> int:
     session = Session()
     vehicle = session.query(Vehicle).filter(Vehicle.type == type).first()
     id = vehicle.id
+    print(id)
+    
     session.close()
     return id
     
@@ -62,9 +59,11 @@ def get_vehicle_id(type : str) -> int:
 def create_reservation(reservation_data : dict):
     session = Session()
     user_id = create_user(reservation_data["f_name"], reservation_data["l_name"], reservation_data["email"], reservation_data["phone"], reservation_data["address"], reservation_data["immatriculation"])
-    new_reservation = Reservation(user_id = user_id, vehicle_id = get_vehicle_id(reservation_data['type']), start_time = reservation_data['start_time'])
+    new_reservation = Reservation(user_id = user_id, vehicle_id = get_vehicle_id(reservation_data["type"]), start_time = reservation_data['start_time'], validated = True)
     session.add(new_reservation)
     session.commit()
+    new_reservation.validated = is_slot_valid(get_reservation_time(new_reservation.id), get_vehicle_type(new_reservation.vehicle_id))
+    print(new_reservation.validated)
     session.close()
 
 def get_fullname(user_id) -> str:
@@ -188,6 +187,35 @@ def is_slot_valid(time_slot : (datetime.datetime, datetime.datetime), type : str
         
     return True
 
+
+# info = {
+#     "f_name" : "Tanya",
+#     "l_name" : "So",
+#     "email" : "tsy@hotmail.com",
+#     "phone" : "1234567890",
+#     "address" : "abcde",
+#     "immatriculation" : "hfhjkjjasshj",
+#     "type" : "compact",
+#     "start_time" : datetime.datetime.now()
+# }
+
+info2 = {
+    "f_name" : "Tanya",
+    "l_name" : "So",
+    "email" : "tsy@hotmail.com",
+    "phone" : "1234567890",
+    "address" : "abcde",
+    "immatriculation" : "hfhjkjjasshj",
+    "type" : "compact",
+    "start_time" : datetime.datetime(2023, 1, 1,)
+}
+
 Base.metadata.create_all(engine)
 
+
+
+
 get_reservations(datetime.datetime(2023,1,1))
+
+# create_reservation(info)
+create_reservation(info2)
