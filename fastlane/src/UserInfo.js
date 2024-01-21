@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './UserInfo.css';
+import UserInfoImg from './Images/UserInfoImg.webp';
 
 const UserInfo = () => {
   const [formData, setFormData] = useState({
@@ -74,77 +75,79 @@ const UserInfo = () => {
   };
 
   return (
-    <div className='page-content'>
-      <h1>User Information</h1>
+    <div className='page-content' style={{ margin: 150, display: 'flex' }}>
+      <div style={{ flex: 1, marginRight: 50 }}>
+        <h1>User Information</h1>
 
-      <div className='user-details'>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor='firstName'>First Name</label>
-            <input
-              type='text'
-              id='firstName'
-              name='firstName'
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <div className='user-details'>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor='firstName'>First Name</label>
+              <input
+                type='text'
+                id='firstName'
+                name='firstName'
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor='lastName'>Last Name</label>
-            <input
-              type='text'
-              id='lastName'
-              name='lastName'
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor='lastName'>Last Name</label>
+              <input
+                type='text'
+                id='lastName'
+                name='lastName'
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor='email'>Email {emailError && <span className='error'>{emailError}</span>}
-</label>
+            <div>
+              <label htmlFor='email'>Email {emailError && <span className='error'>{emailError}</span>}</label>
+              <input
+                type='email'
+                id='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-            <input
-              type='email'
-              id='email'
-              name='email'
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor='phoneNumber'>Phone Number{phoneNumberError && <span className='error'>{phoneNumberError}</span>}</label>
+              <input
+                type='tel'
+                id='phoneNumber'
+                name='phoneNumber'
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor='phoneNumber'>Phone Number{phoneNumberError && <span className='error'>{phoneNumberError}</span>}</label>
-            <input
-              type='tel'
-              id='phoneNumber'
-              name='phoneNumber'
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              required
-            />
-            
-          </div>
+            <div>
+              <label htmlFor='vehicleRegistrationPlate'>Vehicle Registration Plate{registrationPlateError && <span className='error'>{registrationPlateError}</span>}</label>
+              <input
+                type='text'
+                id='vehicleRegistrationPlate'
+                name='vehicleRegistrationPlate'
+                value={formData.vehicleRegistrationPlate}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor='vehicleRegistrationPlate'>Vehicle Registration Plate{registrationPlateError && <span className='error'>{registrationPlateError}</span>}</label>
-            <input
-              type='text'
-              id='vehicleRegistrationPlate'
-              name='vehicleRegistrationPlate'
-              value={formData.vehicleRegistrationPlate}
-              onChange={handleChange}
-              required
-            />
-            
-          </div>
+            <button type='submit'>Submit</button>
+          </form>
+        </div>
+      </div>
 
-          <button type='submit'>Submit</button>
-        </form>
+      <div className='UserInfoImg'>
+        <img src={UserInfoImg} alt='UserInfoImg' style={{ width: '100%', height: 'auto', marginRight:'200px' }} />
       </div>
     </div>
   );

@@ -20,14 +20,14 @@ body {
     display: flex;
   }
   
-  .UserDetailsImg {
+  .UserInfoImg {
     margin-right: auto;
   }
   
-  .UserDetailsImg img {
-    max-width: 50%;
+  .UserInfoImg img {
+    max-width: 100%;
     height: auto;
-    margin-left: 50px;
+    margin-left: 100px;
   }
   
   .user-details div {
@@ -43,10 +43,11 @@ body {
   
   .user-details input {
     width: 400px;
+    height: 25px;
     padding: 5px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
   }
   
   .user-details button {
@@ -57,7 +58,7 @@ body {
     cursor: pointer;
     margin-top: 10px;
     margin-left: 40px;
-    border-radius: 4px;
+    border-radius: 25px;
   }
   
   .user-details button:hover {
