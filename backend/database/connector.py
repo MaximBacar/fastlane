@@ -37,8 +37,7 @@ class User(Base):
 
 
 
-
-def create_user( f_name, l_name, email, phone, address, immatriculation) -> int:
+def create_user(f_name, l_name, email, phone, address, immatriculation) -> int:
     session = Session()
     new_user = User(first_name=f_name, last_name=l_name, email=email, phone=phone, address=address, immatriculation=immatriculation)
     session.add(new_user)
@@ -61,6 +60,59 @@ def create_reservation(reservation_data : dict):
     new_reservation = Reservation(user_id = user_id, vehicle_id = get_vehicle_id(reservation_data['type']), start_time = reservation_data['start_time'])
     session.add(new_reservation)
     session.commit()
+    session.close()
+
+# added
+def get_fullname(user_id) -> str:
+    session = Session()
+    user = session.query(User).filter(User.id == user_id).first()
+    f_name = user.first_name
+    l_name = user.last_name
+    fullname = f"{f_name} {l_name}"
+    
+    session.close()
+    return fullname
+    
+# added
+def get_vehicle_type(vehicle_id) -> str:
+    session = Session()
+    vehicle = session.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
+    vehicle_type = vehicle.type
+    
+    session.close()
+    return vehicle_type
+
+def get_phone_nb(user_id) -> str:
+    session = Session()
+    user = session.query(User).filter(User.id == user_id).first()
+    phonenb = user.phone
+    
+    session.close()
+    return phonenb
+
+
+# added
+def get_reservations(the_date : datetime.datetime):
+    session = Session()
+    just_date = the_date.date()
+    print(just_date)
+    all_reservations = session.query(Reservation).filter(func.DATE(Reservation.start_time) == just_date).all()
+    
+    list_reservations = []
+    
+    for reservation in all_reservations:
+        start, end = get_reservation_time(reservation.id)
+        diction = {
+            "full_name" : get_fullname(reservation.user_id),
+            "phone_nb" : get_phone_nb(reservation.user_id),
+            "type" :get_vehicle_type(reservation.vehicle_id),
+            "start" : f"{start.hour}:{str(start.minute).zfill(2)}",
+            "end" : f"{end.hour}:{str(end.minute).zfill(2)}"
+        }
+        list_reservations.append(diction)
+        
+    
+    print(list_reservations)
     session.close()
 
 
@@ -125,21 +177,3 @@ def is_slot_valid(time_slot : (datetime.datetime, datetime.datetime), type : str
     return True
 
 Base.metadata.create_all(engine)
-
-user_registration = {
-    "f_name"            : "fname",
-    "l_name"            : "lname",
-    "email"             : "email",
-    "phone"             : "phone",
-    "address"           : "address",
-    "immatriculation"   : "immatriculation",
-    "type"              : "compact",
-    "start_time"        : datetime.datetime.now()
-}
-
-create_reservation(user_registration)
-a = get_slots((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)))
-print(a)
-
-print(is_slot_valid((datetime.datetime(year=2023, month=1, day=1, hour=3, minute=0, second=0), datetime.datetime(year=2023, month=1, day=1, hour=3, minute=30, second=0)), type="class-1"))
-
